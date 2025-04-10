@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:ignore="SpeakableTextPresentCheck"></androidx.viewpager.widget.ViewPager>
-
+        tools:ignore="SpeakableTextPresentCheck">
+    </androidx.viewpager.widget.ViewPager>
+    
     <com.google.android.material.tabs.TabLayout
-
         android:id="@+id/myTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +26,7 @@
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextColor="#9E9E9E"
-        tools:ignore="SpeakableTextPresentCheck"></com.google.android.material.tabs.TabLayout>
+        tools:ignore="SpeakableTextPresentCheck">
+    </com.google.android.material.tabs.TabLayout>
 
 </LinearLayout>

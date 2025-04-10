@@ -1,33 +1,29 @@
 package com.example.android.mp3musicapp.Model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class PlayList implements Serializable {
-
-    @SerializedName("IdPlayList")
-    @Expose
-    private String idPlayList;
-
-    @SerializedName("Ten")
-    @Expose
+    private int idPlayList;
     private String ten;
-
-    @SerializedName("HinhNen")
-    @Expose
     private String hinhNen;
 
-    @SerializedName("HinhIcon")
-    @Expose
-    private String hinhIcon;
+    // Constructor mặc định
+    public PlayList() {
+    }
 
-    public String getIdPlayList() {
+    // Constructor đầy đủ
+    public PlayList(int idPlayList, String ten, String hinhNen) {
+        this.idPlayList = idPlayList;
+        this.ten = ten;
+        this.hinhNen = hinhNen;
+    }
+
+    // Getter và Setter
+    public int getIdPlayList() {
         return idPlayList;
     }
 
-    public void setIdPlayList(String idPlayList) {
+    public void setIdPlayList(int idPlayList) {
         this.idPlayList = idPlayList;
     }
 
@@ -46,13 +42,4 @@ public class PlayList implements Serializable {
     public void setHinhNen(String hinhNen) {
         this.hinhNen = hinhNen;
     }
-
-    public String getHinhIcon() {
-        return hinhIcon;
-    }
-
-    public void setHinhIcon(String hinhIcon) {
-        this.hinhIcon = hinhIcon;
-    }
-
 }

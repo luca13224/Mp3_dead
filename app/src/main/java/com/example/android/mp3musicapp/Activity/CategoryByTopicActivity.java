@@ -5,80 +5,48 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.example.android.mp3musicapp.Adapter.CategoryByTopicAdapter;
 import com.example.android.mp3musicapp.Model.ChuDe;
 import com.example.android.mp3musicapp.Model.TheLoai;
 import com.example.android.mp3musicapp.R;
-import com.example.android.mp3musicapp.Service.ApiService;
-import com.example.android.mp3musicapp.Service.DataService;
+import com.example.android.mp3musicapp.db.DatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategoryByTopicActivity extends AppCompatActivity {
-    ChuDe chuDe;
-    RecyclerView recyclerViewCategoryByTopic;
-    Toolbar toolbarCategoryByTopic;
-    CategoryByTopicAdapter categoryByTopicAdapter;
+    RecyclerView recyclerView;
+    DatabaseHelper db;
+    ArrayList<TheLoai> theLoais;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_by_topic);
-        GetIntent();
-        viewBinding();
-        init();
-        getData();
-    }
 
-    private void getData() {
-        DataService service = ApiService.getService();
-        Call<List<TheLoai>> callback = service.getCategoryByTopic(chuDe.getIdChuDe());
-        callback.enqueue(new Callback<List<TheLoai>>() {
-            @Override
-            public void onResponse(Call<List<TheLoai>> call, Response<List<TheLoai>> response) {
-                ArrayList<TheLoai> theLoaiArrayList = (ArrayList<TheLoai>) response.body();
-                categoryByTopicAdapter = new CategoryByTopicAdapter(CategoryByTopicActivity.this, theLoaiArrayList);
-                recyclerViewCategoryByTopic.setLayoutManager(new GridLayoutManager(CategoryByTopicActivity.this, 2));
-                recyclerViewCategoryByTopic.setAdapter(categoryByTopicAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<TheLoai>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void init() {
-        setSupportActionBar(toolbarCategoryByTopic);
+        Toolbar toolbar = findViewById(R.id.toolBatCategoryByTopic);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        recyclerView = findViewById(R.id.recyclerViewCategoryByTopic);
+        db = new DatabaseHelper(this);
+
+        ChuDe chuDe = (ChuDe) getIntent().getSerializableExtra("chude");
         getSupportActionBar().setTitle(chuDe.getTenChuDe());
-        toolbarCategoryByTopic.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        theLoais = db.getTheLoaiByChuDe(chuDe.getIdChuDe());
+
+        CategoryByTopicAdapter adapter = new CategoryByTopicAdapter(this, theLoais);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(adapter);
     }
 
-    private void viewBinding() {
-        recyclerViewCategoryByTopic = findViewById(R.id.recyclerViewCategoryByTopic);
-        toolbarCategoryByTopic = findViewById(R.id.toolBatCategoryByTopic);
-    }
-
-    private void GetIntent() {
-        Intent intent = getIntent();
-        if (intent.hasExtra("chude")){
-            chuDe = (ChuDe) intent.getSerializableExtra("chude");
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 }

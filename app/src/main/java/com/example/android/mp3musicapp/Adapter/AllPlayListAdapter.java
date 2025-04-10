@@ -20,44 +20,44 @@ import java.util.ArrayList;
 
 public class AllPlayListAdapter extends RecyclerView.Adapter<AllPlayListAdapter.ViewHolder> {
     Context context;
-    ArrayList<PlayList> playListArrayList;
+    ArrayList<PlayList> playLists;
 
-    public AllPlayListAdapter(Context context, ArrayList<PlayList> playListArrayList) {
+    public AllPlayListAdapter(Context context, ArrayList<PlayList> playLists) {
         this.context = context;
-        this.playListArrayList = playListArrayList;
+        this.playLists = playLists;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.all_play_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PlayList playList = playListArrayList.get(position);
-        holder.tvTenPlayList.setText(playList.getTen());
-        Picasso.get().load(playList.getHinhNen()).into(holder.imgHinhNen);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        PlayList playList = playLists.get(position);
+        Picasso.get().load(playList.getHinhNen()).into(holder.img);
+        holder.tvTitle.setText(playList.getTen());
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, MusicListActivity.class);
+            intent.putExtra("playlist", playList);
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return playListArrayList.size();
+        return playLists.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgHinhNen;
-        TextView tvTenPlayList;
-        public ViewHolder(@NonNull View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView img;
+        TextView tvTitle;
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            imgHinhNen = itemView.findViewById(R.id.imageViewAllPlayList);
-            tvTenPlayList = itemView.findViewById(R.id.tvAllPlayList);
-            itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, MusicListActivity.class);
-                intent.putExtra("itemplaylist", playListArrayList.get(getPosition()));
-                context.startActivity(intent);
-            });
+            img = itemView.findViewById(R.id.imageViewAllPlayList);
+            tvTitle = itemView.findViewById(R.id.tvAllPlayList);
         }
     }
 }

@@ -4,7 +4,8 @@ buildscript {
         mavenCentral() // Thay jcenter() vì JCenter đã ngừng hoạt động từ 2021
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2' // Cập nhật lên phiên bản mới nhất tương thích với Gradle 8.10
+        classpath 'com.android.tools.build:gradle:8.9.1'
+        // Cập nhật lên phiên bản mới nhất tương thích với Gradle 8.10
     }
 }
 
@@ -15,6 +16,5 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register('clean', Delete) { Delete
 }

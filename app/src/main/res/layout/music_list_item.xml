@@ -38,13 +38,6 @@
             android:textSize="18sp"
             android:text="Ca sĩ"
             android:textColor="#979797"/>
-        <ImageView
-            android:id="@+id/imageViewLuotThichBaiHat"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_white_love"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"/>
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

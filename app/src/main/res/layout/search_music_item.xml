@@ -35,11 +35,5 @@
         android:text="Ca sĩ"
         android:textColor="#9e9797"
         android:textSize="14sp"/>
-    <ImageView
-        android:id="@+id/imageViewLuotThichSearchMusic"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_white_love"/>
+
 </RelativeLayout>

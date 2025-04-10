@@ -6,68 +6,44 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.example.android.mp3musicapp.Adapter.AllPlayListAdapter;
 import com.example.android.mp3musicapp.Model.PlayList;
 import com.example.android.mp3musicapp.R;
-import com.example.android.mp3musicapp.Service.ApiService;
-import com.example.android.mp3musicapp.Service.DataService;
+import com.example.android.mp3musicapp.db.DatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AllPlayListActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    RecyclerView recyclerViewAllPlayList;
-    AllPlayListAdapter allPlayListAdapter;
+    RecyclerView recyclerView;
+    DatabaseHelper db;
+    ArrayList<PlayList> playLists;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_play_list);
-        bindingView();
-        init();
-        getData();
-    }
 
-    private void getData() {
-        DataService service = ApiService.getService();
-        Call<List<PlayList>> callback = service.getAllPlayList();
-        callback.enqueue(new Callback<List<PlayList>>() {
-            @Override
-            public void onResponse(Call<List<PlayList>> call, Response<List<PlayList>> response) {
-                ArrayList<PlayList> playListArrayList = (ArrayList<PlayList>) response.body();
-                allPlayListAdapter = new AllPlayListAdapter(AllPlayListActivity.this, playListArrayList);
-                recyclerViewAllPlayList.setLayoutManager(new GridLayoutManager(AllPlayListActivity.this, 2));
-                recyclerViewAllPlayList.setAdapter(allPlayListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<PlayList>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void init() {
+        Toolbar toolbar = findViewById(R.id.toolBarAllPlayList);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Tất cả Playlist");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Play Lists");
-        toolbar.setTitleTextColor(getResources().getColor(R.color.purple));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
+        recyclerView = findViewById(R.id.recyclerViewAllPlayList);
+        db = new DatabaseHelper(this);
+
+        playLists = db.getAllPlayLists();
+        AllPlayListAdapter adapter = new AllPlayListAdapter(this, playLists);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(adapter);
     }
 
-    private void bindingView() {
-        toolbar = findViewById(R.id.toolBarAllPlayList);
-        recyclerViewAllPlayList = findViewById(R.id.recyclerViewAllPlayList);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

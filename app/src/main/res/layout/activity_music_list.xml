@@ -21,10 +21,7 @@
             app:expandedTitleMarginBottom="33dp"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/custom_background_banner"/>
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolBarMusicList"
                 android:layout_width="match_parent"

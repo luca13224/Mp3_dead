@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.PlayMusicActivity" />
-        <activity android:name=".Activity.AllAlbumListActivity" />
         <activity android:name=".Activity.CategoryByTopicActivity" />
         <activity android:name=".Activity.AllTopicActivity" />
         <activity android:name=".Activity.AllPlayListActivity" />

@@ -2,72 +2,48 @@ package com.example.android.mp3musicapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.example.android.mp3musicapp.Adapter.AllTopicAdapter;
 import com.example.android.mp3musicapp.Model.ChuDe;
 import com.example.android.mp3musicapp.R;
-import com.example.android.mp3musicapp.Service.ApiService;
-import com.example.android.mp3musicapp.Service.DataService;
+import com.example.android.mp3musicapp.db.DatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AllTopicActivity extends AppCompatActivity {
-    RecyclerView recyclerViewAllCateGory;
-    Toolbar toolBarAllCategory;
-    AllTopicAdapter allTopicAdapter;
+    RecyclerView recyclerView;
+    DatabaseHelper db;
+    ArrayList<ChuDe> chuDes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_topic);
-        viewBinding();
-        init();
-        getData();
-    }
 
-    private void getData() {
-        DataService service = ApiService.getService();
-        Call<List<ChuDe>> callback = service.getAllTopic();
-        callback.enqueue(new Callback<List<ChuDe>>() {
-            @Override
-            public void onResponse(Call<List<ChuDe>> call, Response<List<ChuDe>> response) {
-                ArrayList<ChuDe> chuDeArrayList = (ArrayList<ChuDe>) response.body();
-                allTopicAdapter = new AllTopicAdapter(AllTopicActivity.this, chuDeArrayList);
-                recyclerViewAllCateGory.setLayoutManager(new LinearLayoutManager(AllTopicActivity.this));
-                recyclerViewAllCateGory.setAdapter(allTopicAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<ChuDe>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void init() {
-        setSupportActionBar(toolBarAllCategory);
+        Toolbar toolbar = findViewById(R.id.toolBarAllTopic);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Tất cả Chủ đề");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Tất cả chủ đề");
-        toolBarAllCategory.setTitleTextColor(getResources().getColor(R.color.purple));
-        toolBarAllCategory.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
+        recyclerView = findViewById(R.id.recyclerViewAllTopic);
+        db = new DatabaseHelper(this);
+
+        chuDes = db.getAllChuDe();
+        AllTopicAdapter adapter = new AllTopicAdapter(this, chuDes);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(adapter);
     }
 
-    private void viewBinding() {
-        recyclerViewAllCateGory = findViewById(R.id.recyclerViewAllCategory);
-        toolBarAllCategory = findViewById(R.id.toolBarAllCategory);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

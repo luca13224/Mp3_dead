@@ -1,18 +1,23 @@
 package com.example.android.mp3musicapp.Model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
+import java.io.Serializable;
 import java.util.List;
 
-public class ChuDeVaTheLoai {
-    @SerializedName("TheLoai")
-    @Expose
-    private List<TheLoai> theLoai = null;
-    @SerializedName("ChuDe")
-    @Expose
-    private List<ChuDe> chuDe = null;
+public class ChuDeVaTheLoai implements Serializable {
+    private List<TheLoai> theLoai;
+    private List<ChuDe> chuDe;
 
+    // Constructor mặc định
+    public ChuDeVaTheLoai() {
+    }
+
+    // Constructor đầy đủ
+    public ChuDeVaTheLoai(List<TheLoai> theLoai, List<ChuDe> chuDe) {
+        this.theLoai = theLoai;
+        this.chuDe = chuDe;
+    }
+
+    // Getter và Setter
     public List<TheLoai> getTheLoai() {
         return theLoai;
     }

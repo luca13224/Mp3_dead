@@ -7,33 +7,33 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<Fragment> arrayFragment = new ArrayList<>();
-    private ArrayList<String> arrayTitle = new ArrayList<>();
-    public MainViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
-        super(fm, behavior);
+    private List<Fragment> fragments = new ArrayList<>();
+    private List<String> titles = new ArrayList<>();
+
+    public MainViewPagerAdapter(FragmentManager fm) {
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
-    @NonNull
+    public void addFragment(Fragment fragment, String title) {
+        fragments.add(fragment);
+        titles.add(title);
+    }
+
     @Override
     public Fragment getItem(int position) {
-        return arrayFragment.get(position);
+        return fragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return arrayFragment.size();
+        return fragments.size();
     }
 
-    public void addFragment(Fragment fragment, String title){
-        arrayFragment.add(fragment);
-        arrayTitle.add(title);
-    }
-
-    @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return arrayTitle.get(position);
+        return titles.get(position);
     }
 }

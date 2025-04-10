@@ -21,47 +21,44 @@ import java.util.ArrayList;
 
 public class CategoryByTopicAdapter extends RecyclerView.Adapter<CategoryByTopicAdapter.ViewHolder> {
     Context context;
-    ArrayList<TheLoai> chuDeArrayList;
+    ArrayList<TheLoai> theLoais;
 
-    public CategoryByTopicAdapter(Context context, ArrayList<TheLoai> chuDeArrayList) {
+    public CategoryByTopicAdapter(Context context, ArrayList<TheLoai> theLoais) {
         this.context = context;
-        this.chuDeArrayList = chuDeArrayList;
+        this.theLoais = theLoais;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.category_by_topic_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TheLoai theLoai = chuDeArrayList.get(position);
-        holder.tvCategoryByTopic.setText(theLoai.getTenTheLoai());
-        Picasso.get().load(theLoai.getHinhTheLoai()).into(holder.imageViewCategoryByTopic);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        TheLoai theLoai = theLoais.get(position);
+        Picasso.get().load(theLoai.getHinhTheLoai()).into(holder.img);
+        holder.tvTitle.setText(theLoai.getTenTheLoai());
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, MusicListActivity.class);
+            intent.putExtra("theloai", theLoai);
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        if (chuDeArrayList != null){
-            return chuDeArrayList.size();
-        }
-        else return 0;
+        return theLoais.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView imageViewCategoryByTopic;
-        TextView tvCategoryByTopic;
-        public ViewHolder(@NonNull View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView img;
+        TextView tvTitle;
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            imageViewCategoryByTopic = itemView.findViewById(R.id.imageViewCategoryByTopic);
-            tvCategoryByTopic = itemView.findViewById(R.id.tvCategoryByTopic);
-            itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, MusicListActivity.class);
-                intent.putExtra("idtheloai", chuDeArrayList.get(getPosition()));
-                context.startActivity(intent);
-            });
+            img = itemView.findViewById(R.id.imageViewCategoryByTopic);
+            tvTitle = itemView.findViewById(R.id.tvCategoryByTopic);
         }
     }
 }

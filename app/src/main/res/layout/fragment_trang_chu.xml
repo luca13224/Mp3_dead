@@ -1,40 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:id="@+id/fragment_trang_chu"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none"
-    android:fillViewport="true">
+    tools:ignore="SpeakableTextPresentCheck">
+
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <fragment
-            android:id="@+id/fragmentBanner"
-            android:name="com.example.android.mp3musicapp.Fragment.FragmentBanner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <fragment
-            android:id="@+id/fragmentPlayList"
-            android:name="com.example.android.mp3musicapp.Fragment.Fragment_PlayList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <fragment
-            android:id="@+id/fragmentChuDeTheLoai"
-            android:name="com.example.android.mp3musicapp.Fragment.Fragment_ChuDe_TheLoai"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <fragment
-            android:id="@+id/fragmentAlBumHot"
-            android:name="com.example.android.mp3musicapp.Fragment.Fragment_Album_Hot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <fragment
-            android:id="@+id/fragmentBaiHatHot"
-            android:name="com.example.android.mp3musicapp.Fragment.Fragment_Bai_Hat_Hot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/fragmentPlayList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fragmentChuDeTheLoai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </ScrollView>

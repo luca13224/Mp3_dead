@@ -45,10 +45,7 @@ public class PlayListAdapter extends ArrayAdapter<PlayList> {
         }
         PlayList playList = getItem(position);
         System.out.println("Day la hinh nen " + playList.getHinhNen());
-        System.out.println("Day la hinh icon " + playList.getHinhIcon());
-
         Picasso.get().load(playList.getHinhNen()).into(viewHolder.imgBackground);
-        Picasso.get().load(playList.getHinhIcon()).into(viewHolder.imgPlayList);
 
         viewHolder.tvPlayListName.setText(playList.getTen());
         return convertView;

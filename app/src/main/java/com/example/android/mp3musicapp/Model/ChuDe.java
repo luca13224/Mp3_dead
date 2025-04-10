@@ -1,27 +1,29 @@
 package com.example.android.mp3musicapp.Model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class ChuDe implements Serializable {
-
-    @SerializedName("IdChuDe")
-    @Expose
-    private String idChuDe;
-    @SerializedName("TenChuDe")
-    @Expose
+    private int idChuDe;
     private String tenChuDe;
-    @SerializedName("HinhChuDe")
-    @Expose
     private String hinhChuDe;
 
-    public String getIdChuDe() {
+    // Constructor mặc định
+    public ChuDe() {
+    }
+
+    // Constructor đầy đủ
+    public ChuDe(int idChuDe, String tenChuDe, String hinhChuDe) {
+        this.idChuDe = idChuDe;
+        this.tenChuDe = tenChuDe;
+        this.hinhChuDe = hinhChuDe;
+    }
+
+    // Getter và Setter
+    public int getIdChuDe() {
         return idChuDe;
     }
 
-    public void setIdChuDe(String idChuDe) {
+    public void setIdChuDe(int idChuDe) {
         this.idChuDe = idChuDe;
     }
 
@@ -40,5 +42,4 @@ public class ChuDe implements Serializable {
     public void setHinhChuDe(String hinhChuDe) {
         this.hinhChuDe = hinhChuDe;
     }
-
 }
