@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MusicApp.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,22 +68,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('user2', 'user2@example.com', '654321')");
 
         db.execSQL("INSERT INTO PlayLists (ten, hinhNen) VALUES " +
-                "('Playlist 1', 'https://example.com/playlist1.jpg'), " +
-                "('Playlist 2', 'https://example.com/playlist2.jpg')");
+                "('Playlist 1', 'android.resource://com.example.android.mp3musicapp/drawable/playlist'), " +
+                "('Playlist 2', 'android.resource://com.example.android.mp3musicapp/drawable/playlist_2')");
 
         db.execSQL("INSERT INTO ChuDe (tenChuDe, hinhChuDe) VALUES " +
-                "('Chủ Đề 1', 'https://example.com/chude1.jpg'), " +
-                "('Chủ Đề 2', 'https://example.com/chude2.jpg')");
+                "('Dân Gian', 'android.resource://com.example.android.mp3musicapp/drawable/dan_gian'), " +
+                "('Love', 'android.resource://com.example.android.mp3musicapp/drawable/love')");
 
         db.execSQL("INSERT INTO TheLoai (tenTheLoai, hinhTheLoai) VALUES " +
-                "('Thể Loại 1', 'https://example.com/theloai1.jpg'), " +
-                "('Thể Loại 2', 'https://example.com/theloai2.jpg')");
+                "('Lofi', 'android.resource://com.example.android.mp3musicapp/drawable/lofi'), " +
+                "('Remix','android.resource://com.example.android.mp3musicapp/drawable/remix')");
 
         db.execSQL("INSERT INTO Songs (tenBaiHat, hinhBaiHat, caSi, linkBaiHat, playListId, chuDeId, theLoaiId, luotThich) VALUES " +
-                "('Hay Trao Cho Anh', 'drawable/hay_trao_cho_anh_.jpg', 'Sơn Tùng M-TP', 'raw/haytraochoanh.mp3', 1, 1, 1, 5), " +
-                "('Tái Sinh', 'drawable/tai_sinh.jpg', 'Tùng Dương', 'raw/taisinh.mp3', 2, 2, 2, 3), " +
-                "('Bài Hát 3', 'https://example.com/song3.jpg', 'Ca Sĩ 1', 'https://example.com/song3.mp3', 1, 1, 2, 2), " +
-                "('Bài Hát 4', 'https://example.com/song4.jpg', 'Ca Sĩ 3', 'https://example.com/song4.mp3', null, 2, 1, 1)");
+                "('Hay Trao Cho Anh', 'android.resource://com.example.android.mp3musicapp/drawable/hay_trao_cho_anh', 'Sơn Tùng M-TP', 'raw/hay_trao_cho_anh.mp3', 1, 1, 1, 5), " +
+                "('Tái Sinh', 'android.resource://com.example.android.mp3musicapp/drawable/tai_sinh', 'Tùng Dương', 'raw/tai_sinh.mp3', 2, 2, 2, 3), " +
+                "('Đi Giữa Trời Rực Rỡ', 'android.resource://com.example.android.mp3musicapp/drawable/di_giua_troi_ruc_ro', 'Ngô Lan Hương', 'raw/di_giua_troi_ruc_ro.mp3', 1, 1, 2, 2), " +
+                "('Mất Kết Nối', 'android.resource://com.example.android.mp3musicapp/drawable/mat_ket_noi', 'Dương Domic', 'raw/mat_ket_noi.mp3', 2, 2, 1, 1)");
     }
 
     @Override

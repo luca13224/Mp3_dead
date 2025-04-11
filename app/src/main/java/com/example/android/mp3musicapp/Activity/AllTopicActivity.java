@@ -25,12 +25,12 @@ public class AllTopicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_topic);
 
-        Toolbar toolbar = findViewById(R.id.toolBarAllTopic);
+        Toolbar toolbar = findViewById(R.id.toolBarAllCategory);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Tất cả Chủ đề");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = findViewById(R.id.recyclerViewAllTopic);
+        recyclerView = findViewById(R.id.recyclerViewAllCategory);
         db = new DatabaseHelper(this);
 
         chuDes = db.getAllChuDe();

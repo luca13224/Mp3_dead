@@ -1,10 +1,8 @@
 package com.example.android.mp3musicapp.Activity;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -127,36 +125,46 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void playSong() {
-        // Giải phóng MediaPlayer cũ nếu có
         if (mediaPlayer != null) mediaPlayer.release();
 
         BaiHat baiHat = baiHats.get(position);
         try {
-            if (baiHat.getLinkBaiHat().startsWith("raw://")) {
-                int resId = baiHat.getLinkBaiHat().equals("raw://haytraochoanh") ? R.raw.haytraochoanh : R.raw.taisinh;
+            mediaPlayer = new MediaPlayer();
+            String link = baiHat.getLinkBaiHat();
+
+            if (link.startsWith("raw/")) {
+                // Xử lý file trong res/raw
+                String fileName = link.replace("raw/", "").replace(".mp3", "");
+                int resId = getResources().getIdentifier(fileName, "raw", getPackageName());
+                if (resId == 0) {
+                    throw new IOException("File raw không tồn tại: " + fileName);
+                }
                 mediaPlayer = MediaPlayer.create(this, resId);
+            } else if (link.startsWith("http://") || link.startsWith("https://")) {
+                // Xử lý URL online
+                mediaPlayer.setDataSource(link);
+                mediaPlayer.prepareAsync(); // Dùng prepareAsync cho URL
+                mediaPlayer.setOnPreparedListener(mp -> mp.start());
             } else {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(baiHat.getLinkBaiHat());
-                mediaPlayer.prepare();
+                throw new IOException("Link không hợp lệ: " + link);
             }
-            mediaPlayer.start();
+
+            if (!link.startsWith("http")) { // Chỉ gọi start() trực tiếp cho file local
+                mediaPlayer.start();
+            }
             btnPlay.setImageResource(R.drawable.ic_pause);
             toolbar.setTitle(baiHat.getTenBaiHat());
 
-            // Cập nhật SeekBar và thời gian
             seekBar.setMax(mediaPlayer.getDuration());
             tvTotalTime.setText(formatTime(mediaPlayer.getDuration()));
             updateSeekBar();
 
-            // Hiển thị hình ảnh đĩa nhạc
             new Handler().postDelayed(() -> {
                 if (fragmentDiaNhac != null) {
                     fragmentDiaNhac.playMusic(baiHat.getHinhBaiHat());
                 }
             }, 100);
 
-            // Xử lý khi phát xong bài
             mediaPlayer.setOnCompletionListener(mp -> {
                 if (isShuffle) {
                     position = new Random().nextInt(baiHats.size());
@@ -167,7 +175,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             });
 
         } catch (IOException e) {
-            Toast.makeText(this, "Không thể phát bài hát!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không thể phát bài hát: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

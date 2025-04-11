@@ -23,7 +23,7 @@ public class PlayListAdapter extends ArrayAdapter<PlayList> {
         super(context, resource, objects);
     }
 
-    class ViewHolder{
+    class ViewHolder {
         TextView tvPlayListName;
         ImageView imgBackground, imgPlayList;
     }
@@ -32,7 +32,7 @@ public class PlayListAdapter extends ArrayAdapter<PlayList> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder = null;
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.playlist_item, null);
             viewHolder = new ViewHolder();
@@ -44,9 +44,38 @@ public class PlayListAdapter extends ArrayAdapter<PlayList> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         PlayList playList = getItem(position);
-        System.out.println("Day la hinh nen " + playList.getHinhNen());
-        Picasso.get().load(playList.getHinhNen()).into(viewHolder.imgBackground);
+        Log.d("PlayListAdapter", "Loading background image: " + playList.getHinhNen());
+        Picasso.get()
+                .load(playList.getHinhNen())
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(viewHolder.imgBackground, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("PlayListAdapter", "Background image loaded: " + playList.getHinhNen());
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e("PlayListAdapter", "Failed to load background image: " + e.getMessage());
+                    }
+                });
+        // Thêm Picasso cho imgPlayList
+        Picasso.get()
+                .load(playList.getHinhNen())
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(viewHolder.imgPlayList, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("PlayListAdapter", "Playlist image loaded: " + playList.getHinhNen());
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e("PlayListAdapter", "Failed to load playlist image: " + e.getMessage());
+                    }
+                });
         viewHolder.tvPlayListName.setText(playList.getTen());
         return convertView;
     }

@@ -25,6 +25,7 @@ public class AllTopicAdapter extends RecyclerView.Adapter<AllTopicAdapter.ViewHo
     public AllTopicAdapter(Context context, ArrayList<ChuDe> chuDes) {
         this.context = context;
         this.chuDes = chuDes;
+
     }
 
     @Override
