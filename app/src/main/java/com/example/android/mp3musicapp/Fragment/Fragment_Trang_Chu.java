@@ -15,7 +15,6 @@ public class Fragment_Trang_Chu extends Fragment {
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentPlayList, new Fragment_PlayList())
-                .replace(R.id.fragmentChuDeTheLoai, new Fragment_ChuDe_TheLoai())
                 .commit();
         return view;
     }

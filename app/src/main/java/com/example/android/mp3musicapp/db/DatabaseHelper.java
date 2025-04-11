@@ -6,9 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.android.mp3musicapp.Model.BaiHat;
-import com.example.android.mp3musicapp.Model.ChuDe;
 import com.example.android.mp3musicapp.Model.PlayList;
-import com.example.android.mp3musicapp.Model.TheLoai;
 
 import java.util.ArrayList;
 
@@ -126,39 +124,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<ChuDe> getAllChuDe() {
-        ArrayList<ChuDe> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM ChuDe", null);
-        if (cursor.moveToFirst()) {
-            do {
-                ChuDe chuDe = new ChuDe();
-                chuDe.setIdChuDe(cursor.getInt(0));
-                chuDe.setTenChuDe(cursor.getString(1));
-                chuDe.setHinhChuDe(cursor.getString(2));
-                list.add(chuDe);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
-
-    public ArrayList<TheLoai> getTheLoaiByChuDe(int idChuDe) {
-        ArrayList<TheLoai> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM TheLoai", null); // Giả định không liên kết ChuDe-TheLoai
-        if (cursor.moveToFirst()) {
-            do {
-                TheLoai theLoai = new TheLoai();
-                theLoai.setIdTheLoai(cursor.getInt(0));
-                theLoai.setTenTheLoai(cursor.getString(1));
-                theLoai.setHinhTheLoai(cursor.getString(2));
-                list.add(theLoai);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
 
     public ArrayList<BaiHat> getSongsByPlayList(int playListId) {
         ArrayList<BaiHat> list = new ArrayList<>();

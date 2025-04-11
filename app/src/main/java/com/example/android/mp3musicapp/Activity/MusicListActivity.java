@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.example.android.mp3musicapp.Adapter.MusicListAdapter;
 import com.example.android.mp3musicapp.Model.BaiHat;
 import com.example.android.mp3musicapp.Model.PlayList;
-import com.example.android.mp3musicapp.Model.TheLoai;
 import com.example.android.mp3musicapp.R;
 import com.example.android.mp3musicapp.db.DatabaseHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,16 +56,12 @@ public class MusicListActivity extends AppCompatActivity {
                     finish();
                     return;
                 }
-            } else if (intent.hasExtra("theloai")) {
-                TheLoai theLoai = (TheLoai) intent.getSerializableExtra("theloai");
-                if (theLoai != null) {
-                    getSupportActionBar().setTitle(theLoai.getTenTheLoai());
-                    baiHats = db.getSongsByTheLoai(theLoai.getIdTheLoai());
-                } else {
-                    Toast.makeText(this, "Không tìm thấy thể loại!", Toast.LENGTH_SHORT).show();
-                    finish();
-                    return;
-                }
+            } else if (intent.hasExtra("category")) { // Handle category case
+                // Assuming you have a Category class or similar
+                // Replace with actual logic for category
+                Toast.makeText(this, "Không tìm thấy thể loại!", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
             } else {
                 Toast.makeText(this, "Không có dữ liệu để hiển thị!", Toast.LENGTH_SHORT).show();
                 finish();
