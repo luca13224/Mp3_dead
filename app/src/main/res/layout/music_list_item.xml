@@ -45,5 +45,13 @@
             android:textSize="18sp"
             android:text="Ca sĩ"
             android:textColor="#979797"/>
+        <ImageView
+            android:id="@+id/imageViewLike"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_white_love"
+            android:contentDescription="Like Button"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

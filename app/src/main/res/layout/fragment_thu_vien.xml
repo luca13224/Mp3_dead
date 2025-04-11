@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.google.android.material.appbar.AppBarLayout
-        android:background="@color/colorPrimary"
-        android:id="@+id/appBarLayoutSearchThuVienMusic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tvCuaToi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/appBarLayoutSearchMusic"
-            android:padding="10dp"
-            android:text="THƯ VIỆN CỦA TÔI"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:background="@color/colorPrimary"/>
-    </com.google.android.material.appbar.AppBarLayout>
+    <Button
+        android:id="@+id/buttonAddSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:text="Thêm bài hát"/>
+    <Button
+        android:id="@+id/buttonDeleteSongs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/buttonAddSong"
+        android:layout_margin="10dp"
+        android:text="Xóa bài hát"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSearchThuVienMusic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appBarLayoutSearchThuVienMusic"/>
+        android:layout_below="@id/buttonAddSong"/>
 </RelativeLayout>

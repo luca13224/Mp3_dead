@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.android.mp3musicapp.Activity.PlayMusicActivity;
 import com.example.android.mp3musicapp.Model.BaiHat;
 import com.example.android.mp3musicapp.R;
+import com.example.android.mp3musicapp.db.DatabaseHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ import java.util.ArrayList;
 public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.ViewHolder> {
     Context context;
     ArrayList<BaiHat> baiHats;
+    DatabaseHelper db;
 
     public MusicListAdapter(Context context, ArrayList<BaiHat> baiHats) {
         this.context = context;
-        this.baiHats = baiHats;
+        this.baiHats = (baiHats != null) ? baiHats : new ArrayList<>();
+        this.db = new DatabaseHelper(context);
     }
 
     @Override
@@ -54,6 +57,26 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
                         Log.e("MusicListAdapter", "Failed to load image: " + e.getMessage());
                     }
                 });
+
+        // Kiểm tra trạng thái "thích"
+        boolean isLiked = db.isSongInFavorites(baiHat.getIdBaiHat());
+        holder.imgLike.setImageResource(isLiked ? R.drawable.ic_red_love : R.drawable.ic_white_love);
+
+        // Xử lý sự kiện nhấn nút "thích"
+        holder.imgLike.setOnClickListener(v -> {
+            if (isLiked) {
+                db.removeSongFromFavorites(baiHat.getIdBaiHat());
+                holder.imgLike.setImageResource(R.drawable.ic_white_love);
+                baiHat.setIdPlayList(0);
+                Log.d("MusicListAdapter", "Removed from Favorites: " + baiHat.getTenBaiHat());
+            } else {
+                db.addSongToFavorites(baiHat.getIdBaiHat());
+                holder.imgLike.setImageResource(R.drawable.ic_red_love);
+                baiHat.setIdPlayList(3);
+                Log.d("MusicListAdapter", "Added to Favorites: " + baiHat.getTenBaiHat());
+            }
+        });
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PlayMusicActivity.class);
             intent.putExtra("baihats", baiHats);
@@ -69,7 +92,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvIndex, tvSong, tvSinger;
-        ImageView imgSong;
+        ImageView imgSong, imgLike;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -77,6 +100,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
             tvSong = itemView.findViewById(R.id.tvTenBaiHatMusicList);
             tvSinger = itemView.findViewById(R.id.tvTenCaSiMusicList);
             imgSong = itemView.findViewById(R.id.imageViewMusicListItem);
+            imgLike = itemView.findViewById(R.id.imageViewLike);
         }
     }
 }

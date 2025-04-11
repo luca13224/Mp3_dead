@@ -1,5 +1,6 @@
 package com.example.android.mp3musicapp.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MusicApp.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -27,7 +28,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "email TEXT UNIQUE, " +
                 "password TEXT)");
 
-        // Tạo bảng Songs (loại bỏ albumId)
+        // Tạo bảng PlayLists
+        db.execSQL("CREATE TABLE PlayLists (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "ten TEXT, " +
+                "hinhNen TEXT)");
+
+        // Tạo bảng Songs
         db.execSQL("CREATE TABLE Songs (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "tenBaiHat TEXT, " +
@@ -35,30 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "caSi TEXT, " +
                 "linkBaiHat TEXT, " +
                 "playListId INTEGER, " +
-                "chuDeId INTEGER, " +
-                "theLoaiId INTEGER, " +
-                "luotThich INTEGER DEFAULT 0, " +
-                "FOREIGN KEY (playListId) REFERENCES PlayLists(id), " +
-                "FOREIGN KEY (chuDeId) REFERENCES ChuDe(id), " +
-                "FOREIGN KEY (theLoaiId) REFERENCES TheLoai(id))");
-
-        // Tạo bảng PlayLists
-        db.execSQL("CREATE TABLE PlayLists (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "ten TEXT, " +
-                "hinhNen TEXT)");
-
-        // Tạo bảng ChuDe
-        db.execSQL("CREATE TABLE ChuDe (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "tenChuDe TEXT, " +
-                "hinhChuDe TEXT)");
-
-        // Tạo bảng TheLoai
-        db.execSQL("CREATE TABLE TheLoai (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "tenTheLoai TEXT, " +
-                "hinhTheLoai TEXT)");
+                "FOREIGN KEY (playListId) REFERENCES PlayLists(id))");
 
         // Thêm dữ liệu mẫu
         db.execSQL("INSERT INTO Users (username, email, password) VALUES " +
@@ -67,21 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO PlayLists (ten, hinhNen) VALUES " +
                 "('Playlist 1', 'android.resource://com.example.android.mp3musicapp/drawable/playlist'), " +
-                "('Playlist 2', 'android.resource://com.example.android.mp3musicapp/drawable/playlist_2')");
+                "('Playlist 2', 'android.resource://com.example.android.mp3musicapp/drawable/playlist_2'), " +
+                "('Favorites', 'android.resource://com.example.android.mp3musicapp/drawable/playlist')");
 
-        db.execSQL("INSERT INTO ChuDe (tenChuDe, hinhChuDe) VALUES " +
-                "('Dân Gian', 'android.resource://com.example.android.mp3musicapp/drawable/dan_gian'), " +
-                "('Love', 'android.resource://com.example.android.mp3musicapp/drawable/love')");
-
-        db.execSQL("INSERT INTO TheLoai (tenTheLoai, hinhTheLoai) VALUES " +
-                "('Lofi', 'android.resource://com.example.android.mp3musicapp/drawable/lofi'), " +
-                "('Remix','android.resource://com.example.android.mp3musicapp/drawable/remix')");
-
-        db.execSQL("INSERT INTO Songs (tenBaiHat, hinhBaiHat, caSi, linkBaiHat, playListId, chuDeId, theLoaiId, luotThich) VALUES " +
-                "('Hay Trao Cho Anh', 'android.resource://com.example.android.mp3musicapp/drawable/hay_trao_cho_anh', 'Sơn Tùng M-TP', 'raw/hay_trao_cho_anh.mp3', 1, 1, 1, 5), " +
-                "('Tái Sinh', 'android.resource://com.example.android.mp3musicapp/drawable/tai_sinh', 'Tùng Dương', 'raw/tai_sinh.mp3', 2, 2, 2, 3), " +
-                "('Đi Giữa Trời Rực Rỡ', 'android.resource://com.example.android.mp3musicapp/drawable/di_giua_troi_ruc_ro', 'Ngô Lan Hương', 'raw/di_giua_troi_ruc_ro.mp3', 1, 1, 2, 2), " +
-                "('Mất Kết Nối', 'android.resource://com.example.android.mp3musicapp/drawable/mat_ket_noi', 'Dương Domic', 'raw/mat_ket_noi.mp3', 2, 2, 1, 1)");
+        db.execSQL("INSERT INTO Songs (tenBaiHat, hinhBaiHat, caSi, linkBaiHat, playListId) VALUES " +
+                "('Hay Trao Cho Anh', 'android.resource://com.example.android.mp3musicapp/drawable/hay_trao_cho_anh', 'Sơn Tùng M-TP', 'raw/hay_trao_cho_anh', 1), " +
+                "('Tái Sinh', 'android.resource://com.example.android.mp3musicapp/drawable/tai_sinh', 'Tùng Dương', 'raw/tai_sinh', 2), " +
+                "('Đi Giữa Trời Rực Rỡ', 'android.resource://com.example.android.mp3musicapp/drawable/di_giua_troi_ruc_ro', 'Ngô Lan Hương', 'raw/di_giua_troi_ruc_ro', 1), " +
+                "('Mất Kết Nối', 'android.resource://com.example.android.mp3musicapp/drawable/mat_ket_noi', 'Dương Domic', 'raw/mat_ket_noi', 2)");
     }
 
     @Override
@@ -124,7 +101,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-
     public ArrayList<BaiHat> getSongsByPlayList(int playListId) {
         ArrayList<BaiHat> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -132,32 +108,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 BaiHat baiHat = new BaiHat();
-                baiHat.setIdBaiHat(cursor.getInt(0));
-                baiHat.setTenBaiHat(cursor.getString(1));
-                baiHat.setHinhBaiHat(cursor.getString(2));
-                baiHat.setCaSi(cursor.getString(3));
-                baiHat.setLinkBaiHat(cursor.getString(4));
-                baiHat.setIsLiked(cursor.getInt(8) > 0); // Đã thêm setIsLiked
-                list.add(baiHat);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
-
-    public ArrayList<BaiHat> getSongsByTheLoai(int theLoaiId) {
-        ArrayList<BaiHat> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Songs WHERE theLoaiId = ?", new String[]{String.valueOf(theLoaiId)});
-        if (cursor.moveToFirst()) {
-            do {
-                BaiHat baiHat = new BaiHat();
-                baiHat.setIdBaiHat(cursor.getInt(0));
-                baiHat.setTenBaiHat(cursor.getString(1));
-                baiHat.setHinhBaiHat(cursor.getString(2));
-                baiHat.setCaSi(cursor.getString(3));
-                baiHat.setLinkBaiHat(cursor.getString(4));
-                baiHat.setIsLiked(cursor.getInt(8) > 0); // Đã thêm setIsLiked
+                baiHat.setIdBaiHat(cursor.getInt(cursor.getColumnIndex("id")));
+                baiHat.setTenBaiHat(cursor.getString(cursor.getColumnIndex("tenBaiHat")));
+                baiHat.setHinhBaiHat(cursor.getString(cursor.getColumnIndex("hinhBaiHat")));
+                baiHat.setCaSi(cursor.getString(cursor.getColumnIndex("caSi")));
+                baiHat.setLinkBaiHat(cursor.getString(cursor.getColumnIndex("linkBaiHat")));
+                baiHat.setIdPlayList(cursor.getInt(cursor.getColumnIndex("playListId")));
                 list.add(baiHat);
             } while (cursor.moveToNext());
         }
@@ -172,12 +128,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 BaiHat baiHat = new BaiHat();
-                baiHat.setIdBaiHat(cursor.getInt(0));
-                baiHat.setTenBaiHat(cursor.getString(1));
-                baiHat.setHinhBaiHat(cursor.getString(2));
-                baiHat.setCaSi(cursor.getString(3));
-                baiHat.setLinkBaiHat(cursor.getString(4));
-                baiHat.setIsLiked(cursor.getInt(8) > 0); // Đã thêm setIsLiked
+                baiHat.setIdBaiHat(cursor.getInt(cursor.getColumnIndex("id")));
+                baiHat.setTenBaiHat(cursor.getString(cursor.getColumnIndex("tenBaiHat")));
+                baiHat.setHinhBaiHat(cursor.getString(cursor.getColumnIndex("hinhBaiHat")));
+                baiHat.setCaSi(cursor.getString(cursor.getColumnIndex("caSi")));
+                baiHat.setLinkBaiHat(cursor.getString(cursor.getColumnIndex("linkBaiHat")));
+                baiHat.setIdPlayList(cursor.getInt(cursor.getColumnIndex("playListId")));
                 list.add(baiHat);
             } while (cursor.moveToNext());
         }
@@ -185,23 +141,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<BaiHat> getLikedSongs() {
+    public ArrayList<BaiHat> getAllSongs() {
         ArrayList<BaiHat> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Songs WHERE luotThich > 0", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM Songs", null);
         if (cursor.moveToFirst()) {
             do {
                 BaiHat baiHat = new BaiHat();
-                baiHat.setIdBaiHat(cursor.getInt(0));
-                baiHat.setTenBaiHat(cursor.getString(1));
-                baiHat.setHinhBaiHat(cursor.getString(2));
-                baiHat.setCaSi(cursor.getString(3));
-                baiHat.setLinkBaiHat(cursor.getString(4));
-                baiHat.setIsLiked(cursor.getInt(8) > 0); // Đã thêm setIsLiked
+                baiHat.setIdBaiHat(cursor.getInt(cursor.getColumnIndex("id")));
+                baiHat.setTenBaiHat(cursor.getString(cursor.getColumnIndex("tenBaiHat")));
+                baiHat.setHinhBaiHat(cursor.getString(cursor.getColumnIndex("hinhBaiHat")));
+                baiHat.setCaSi(cursor.getString(cursor.getColumnIndex("caSi")));
+                baiHat.setLinkBaiHat(cursor.getString(cursor.getColumnIndex("linkBaiHat")));
+                baiHat.setIdPlayList(cursor.getInt(cursor.getColumnIndex("playListId")));
                 list.add(baiHat);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return list;
+    }
+
+    public boolean isSongInFavorites(int idBaiHat) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Songs WHERE id = ? AND playListId = 3", new String[]{String.valueOf(idBaiHat)});
+        boolean isInFavorites = cursor.getCount() > 0;
+        cursor.close();
+        return isInFavorites;
+    }
+
+    public void addSongToFavorites(int idBaiHat) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("playListId", 3); // idPlayList của Favorites
+        db.update("Songs", values, "id = ?", new String[]{String.valueOf(idBaiHat)});
+        db.close();
+    }
+
+    public void removeSongFromFavorites(int idBaiHat) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("playListId", 0); // Đặt lại về 0 (không thuộc playlist nào)
+        db.update("Songs", values, "id = ?", new String[]{String.valueOf(idBaiHat)});
+        db.close();
+    }
+
+    // Thêm phương thức xóa bài hát
+    public long deleteSong(int songId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete("Songs", "id = ?", new String[]{String.valueOf(songId)});
+        db.close();
+        return result;
+    }
+
+    // Thêm phương thức thêm bài hát
+    public long addSong(String tenBaiHat, String caSi, String hinhBaiHat, String linkBaiHat, int playListId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("tenBaiHat", tenBaiHat);
+        values.put("caSi", caSi);
+        values.put("hinhBaiHat", hinhBaiHat != null ? hinhBaiHat : "android.resource://com.example.android.mp3musicapp/drawable/default_song_image");
+        values.put("linkBaiHat", linkBaiHat);
+        values.put("playListId", playListId);
+        long result = db.insert("Songs", null, values);
+        db.close();
+        return result;
     }
 }
